@@ -71,6 +71,10 @@ class Embedding:
         embedded_params: dict[str, ArrayLike],
         new_root_params: dict[str, ArrayLike],
     ) -> dict[str, ArrayLike]:
+        """Receive already embedded params containing intermediate and leaf parameters
+        and remove them from the `embedded_params` dict to reconstruct the user input, and finally
+        recalculate the embedding using values for parameters in passes in `new_root_params`.
+        """
         # We filter out intermediates and leaves and leave only the original vparams and fparams +
         # the `inputs` dict which contains new <name:parameter value> pairs
         inputs = {
