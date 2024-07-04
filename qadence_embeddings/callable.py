@@ -15,9 +15,17 @@ ARRAYLIKE_FN_MAP = {
 }
 
 
-DEFAULT_JAX_MAPPING = {"mul": ("jax.numpy", "multiply")}
+DEFAULT_JAX_MAPPING = {
+    "mul": ("jax.numpy", "multiply"),
+    "sub": ("jax.numpy", "subtract"),
+    "div": ("jax.numpy", "divide"),
+}
 DEFAULT_TORCH_MAPPING = {}
-DEFAULT_NUMPY_MAPPING = {"mul": ("numpy", "multiply")}
+DEFAULT_NUMPY_MAPPING = {
+    "mul": ("numpy", "multiply"),
+    "sub": ("numpy", "subtract"),
+    "div": ("numpy", "divide"),
+}
 
 DEFAULT_INSTRUCTION_MAPPING = {
     "torch": DEFAULT_TORCH_MAPPING,

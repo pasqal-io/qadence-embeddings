@@ -61,3 +61,35 @@ def test_add() -> None:
         )
         results.append(native_result.item())
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
+
+
+def test_subtract() -> None:
+    results = []
+    x = np.random.randn(1)
+    y = np.random.randn(1)
+    for engine_name in ["jax", "torch", "numpy"]:
+        native_call = ConcretizedCallable("sub", ["x", "y"], {}, engine_name)
+        native_result = native_call(
+            {
+                "x": torch.tensor(x) if engine_name == "torch" else x,
+                "y": torch.tensor(y) if engine_name == "torch" else y,
+            }
+        )
+        results.append(native_result.item())
+    assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
+
+
+def test_div() -> None:
+    results = []
+    x = np.random.randn(1)
+    y = np.random.randn(1)
+    for engine_name in ["jax", "torch", "numpy"]:
+        native_call = ConcretizedCallable("div", ["x", "y"], {}, engine_name)
+        native_result = native_call(
+            {
+                "x": torch.tensor(x) if engine_name == "torch" else x,
+                "y": torch.tensor(y) if engine_name == "torch" else y,
+            }
+        )
+        results.append(native_result.item())
+    assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
