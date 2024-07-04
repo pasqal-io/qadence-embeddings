@@ -7,7 +7,9 @@ import torch
 from qadence_embeddings.callable import ConcretizedCallable
 
 
-@pytest.mark.parametrize("fn", ["sin", "cos", "log", "tanh", "sin", "sqrt", "square"])
+@pytest.mark.parametrize(
+    "fn", ["sin", "cos", "log", "tanh", "tan", "acos", "sin", "sqrt", "square"]
+)
 def test_univariate(fn: str) -> None:
     results = []
     x = np.random.uniform(0, 1)
