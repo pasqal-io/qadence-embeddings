@@ -42,7 +42,9 @@ class Embedding:
         }
         self.fparams: dict[str, Optional[ArrayLike]] = {fp: None for fp in fparam_names}
         self.tparams: dict[str, Optional[ArrayLike]] = (
-            None if tparam_names is None else {fp: None for fp in tparam_names}
+            None
+            if tparam_names is None
+            else {fp: None for fp in tparam_names}  #  type: ignore[assignment]
         )
         self.var_to_call: dict[str, ConcretizedCallable] = var_to_call
         self._dtype: DTypeLike = None
@@ -67,7 +69,8 @@ class Embedding:
             )
         if not inputs.keys() == self.fparams.keys():
             logger.error(
-                f"Please provide all fparams, Expected {self.fparams.keys()}, received {inputs.keys()}."
+                f"Please provide all fparams, Expected {self.fparams.keys()},\
+                  received {inputs.keys()}."
             )
         self.fparams = inputs
         self.fparams_assigned = True
@@ -115,12 +118,10 @@ class Embedding:
         return self.embed_all({**self.vparams, **self.fparams, **inputs})
 
     def __call__(self, inputs: dict[str, ArrayLike]) -> dict[str, ArrayLike]:
-        """Functional version of legacy embedding: Return a new dictionary with all embedded parameters."""
+        """Functional version of legacy embedding: Return a new dictionary\
+        with all embedded parameters."""
         return self.embed_all(inputs)
 
-    # @abstractmethod
-    # def name_mapping(self) -> dict:
-    #     raise NotImplementedError()
 
     @property
     def dtype(self) -> DTypeLike:

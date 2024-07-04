@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from importlib import import_module
 from logging import getLogger
-from typing import Callable
+from typing import Tuple
 
 from numpy.typing import ArrayLike
 
@@ -20,7 +20,7 @@ DEFAULT_JAX_MAPPING = {
     "sub": ("jax.numpy", "subtract"),
     "div": ("jax.numpy", "divide"),
 }
-DEFAULT_TORCH_MAPPING = {}
+DEFAULT_TORCH_MAPPING: dict = {}
 DEFAULT_NUMPY_MAPPING = {
     "mul": ("numpy", "multiply"),
     "sub": ("numpy", "subtract"),
@@ -40,7 +40,7 @@ class ConcretizedCallable:
         self,
         call_name: str,
         abstract_args: list[str | float | int],
-        instruction_mapping: dict[str, Callable] = dict(),
+        instruction_mapping: dict[str, Tuple[str, str]] = dict(),
         engine_name: str = "torch",
     ) -> None:
         instruction_mapping = {
