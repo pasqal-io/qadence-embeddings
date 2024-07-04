@@ -28,7 +28,7 @@ def test_embedding() -> None:
             "x": (torch.tensor(x) if engine_name == "torch" else x),
             "theta": (torch.tensor(theta) if engine_name == "torch" else theta),
         }
-        eval_0 = embedding.evaluate_param("%0", inputs)
+        eval_0 = embedding.var_to_call["%0"](inputs)
         results.append(eval_0.item())
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
 
@@ -56,12 +56,11 @@ def test_reembedding() -> None:
             "x": (torch.tensor(x) if engine_name == "torch" else x),
             "theta": (torch.tensor(theta) if engine_name == "torch" else theta),
         }
-        all_params = embedding.embed_all(
-            inputs, include_root_vars=True, store_inputs=True
-        )
-        reembedded_params = embedding.reembed_all(
-            {"x": (torch.tensor(x_rembed) if engine_name == "torch" else x_rembed)}
-        )
+        all_params = embedding.embed_all(inputs)
+        new_params = {
+            "x": (torch.tensor(x_rembed) if engine_name == "torch" else x_rembed)
+        }
+        reembedded_params = embedding.reembed_all(all_params, new_params)
         results.append(all_params["%0"].item())
         reembedded_results.append(reembedded_params["%0"].item())
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
