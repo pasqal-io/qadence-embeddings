@@ -99,7 +99,7 @@ class Embedding:
             inputs[intermediate_or_leaf_var] = engine_callable(inputs)
         return inputs
 
-    def reembed(self, inputs: dict[str, ArrayLike]) -> dict[str, ArrayLike]:
+    def reembed_all(self, inputs: dict[str, ArrayLike]) -> dict[str, ArrayLike]:
         assert (
             self.fparams_assigned
         ), "To reembed, please store original fparam values by setting\

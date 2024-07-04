@@ -59,7 +59,7 @@ def test_reembedding() -> None:
         all_params = embedding.embed_all(
             inputs, include_root_vars=True, store_inputs=True
         )
-        reembedded_params = embedding.reembed(
+        reembedded_params = embedding.reembed_all(
             {"x": (torch.tensor(x_rembed) if engine_name == "torch" else x_rembed)}
         )
         results.append(all_params["%0"].item())
