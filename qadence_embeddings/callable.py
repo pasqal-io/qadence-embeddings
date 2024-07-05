@@ -42,6 +42,7 @@ class ConcretizedCallable:
         abstract_args: list[str | float | int],
         instruction_mapping: dict[str, Tuple[str, str]] = dict(),
         engine_name: str = "torch",
+        device: str = "cpu",
     ) -> None:
         instruction_mapping = {
             **instruction_mapping,
@@ -50,6 +51,7 @@ class ConcretizedCallable:
         self.call_name = call_name
         self.abstract_args = abstract_args
         self.engine_name = engine_name
+        self.device = device
         self.engine_call = None
         engine_call = None
         engine = None
@@ -107,7 +109,9 @@ class ConcretizedCallable:
         arraylike_args = []
         for symbol_or_numeric in self.abstract_args:
             if isinstance(symbol_or_numeric, (float, int)):
-                arraylike_args.append(self.arraylike_fn(symbol_or_numeric))
+                arraylike_args.append(
+                    self.arraylike_fn(symbol_or_numeric, device=self.device)
+                )
             elif isinstance(symbol_or_numeric, str):
                 arraylike_args.append(inputs[symbol_or_numeric])
         return self.engine_call(*arraylike_args)  # type: ignore[misc]
