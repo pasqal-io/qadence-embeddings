@@ -66,7 +66,7 @@ def test_reembedding() -> None:
         new_tparam_val = (
             torch.tensor(t_reembed) if engine_name == "torch" else t_reembed
         )
-        reembedded_params = embedding.reembed_tparam(all_params, new_tparam_val)
+        reembedded_params = embedding.reembed_time(all_params, new_tparam_val)
         results.append(all_params["%1"].item())
         reembedded_results.append(reembedded_params["%1"].item())
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])

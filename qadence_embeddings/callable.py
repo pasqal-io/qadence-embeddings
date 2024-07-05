@@ -35,6 +35,9 @@ DEFAULT_INSTRUCTION_MAPPING = {
 
 
 class ConcretizedCallable:
+    """Transform an abstract function name and arguments into
+    a callable in a linear algebra engine which can be evaluated
+    using user input."""
 
     def __init__(
         self,

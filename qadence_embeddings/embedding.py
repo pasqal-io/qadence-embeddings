@@ -25,10 +25,9 @@ def init_param(
 
 class Embedding:
     """
-    A generic module class to hold and handle the parameters and expressions
-    functions coming from the `Model`. It may contain the list of user input
-    parameters, as well as the trainable variational parameters and the
-    evaluated functions from the data types being used, i.e. torch, numpy, etc.
+    A class carrying information about user-facing parameters, a.k.a root parameters
+    as well as a mapping from interemediate and leaf variables using in expressions
+    or directly as parameters for linear algebra operations.
     """
 
     def __init__(
@@ -50,6 +49,7 @@ class Embedding:
         self.var_to_call: dict[str, ConcretizedCallable] = var_to_call
         self._dtype: DTypeLike = None
         self.time_dependent_vars: list[str] = []
+        self._device = device
 
     @property
     def root_param_names(self) -> list[str]:
@@ -65,13 +65,13 @@ class Embedding:
         """
         for intermediate_or_leaf_var, engine_callable in self.var_to_call.items():
             # We mutate the original inputs dict and include intermediates and leaves.
-            if self.tparam_name in engine_callable.abstract_args:
+            if self.tparam_name and self.tparam_name in engine_callable.abstract_args:
                 self.time_dependent_vars.append(intermediate_or_leaf_var)
                 # we remember which parameters depend on time
             inputs[intermediate_or_leaf_var] = engine_callable(inputs)
         return inputs
 
-    def reembed_tparam(
+    def reembed_time(
         self,
         embedded_params: dict[str, ArrayLike],
         tparam_value: ArrayLike,
@@ -96,6 +96,10 @@ class Embedding:
     @property
     def dtype(self) -> DTypeLike:
         return self._dtype
+
+    @property
+    def device(self) -> str:
+        return self._device
 
     def to(self, args: Any, kwargs: Any) -> None:
         # TODO move to device and dtype
