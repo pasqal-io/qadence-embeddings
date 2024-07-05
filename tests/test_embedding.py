@@ -50,11 +50,13 @@ def test_reembedding() -> None:
         leaf1, native_call1 = "%1", ConcretizedCallable(
             "mul", ["t", "%0"], {}, engine_name
         )
+
+        leaf2, native_call2 = "%2", ConcretizedCallable("sin", ["%1"], {}, engine_name)
         embedding = Embedding(
             v_params,
             f_params,
             tparam,
-            var_to_call={leaf0: native_call0, leaf1: native_call1},
+            var_to_call={leaf0: native_call0, leaf1: native_call1, leaf2: native_call2},
             engine_name=engine_name,
         )
         inputs = {
@@ -67,8 +69,8 @@ def test_reembedding() -> None:
             torch.tensor(t_reembed) if engine_name == "torch" else t_reembed
         )
         reembedded_params = embedding.reembed_time(all_params, new_tparam_val)
-        results.append(all_params["%1"].item())
-        reembedded_results.append(reembedded_params["%1"].item())
+        results.append(all_params["%2"].item())
+        reembedded_results.append(reembedded_params["%2"].item())
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
     assert np.allclose(reembedded_results[0], reembedded_results[1]) and np.allclose(
         reembedded_results[0], reembedded_results[2]

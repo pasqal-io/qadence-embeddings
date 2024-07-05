@@ -65,7 +65,13 @@ class Embedding:
         """
         for intermediate_or_leaf_var, engine_callable in self.var_to_call.items():
             # We mutate the original inputs dict and include intermediates and leaves.
-            if self.tparam_name and self.tparam_name in engine_callable.abstract_args:
+            if self.tparam_name and any(
+                [
+                    p in [self.tparam_name] + self.time_dependent_vars
+                    for p in engine_callable.abstract_args
+                ]  # we check if any parameter in the callables args is time
+                # or depends on an intermediate variable which itself depends on time
+            ):
                 self.time_dependent_vars.append(intermediate_or_leaf_var)
                 # we remember which parameters depend on time
             inputs[intermediate_or_leaf_var] = engine_callable(inputs)
