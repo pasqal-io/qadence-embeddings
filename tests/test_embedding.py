@@ -71,6 +71,8 @@ def test_reembedding() -> None:
         reembedded_params = embedding.reembed_time(all_params, new_tparam_val)
         results.append(all_params["%2"].item())
         reembedded_results.append(reembedded_params["%2"].item())
+    assert all([p in ["%1", "%2"] for p in embedding.time_dependent_vars])
+    assert "%0" not in embedding.time_dependent_vars
     assert np.allclose(results[0], results[1]) and np.allclose(results[0], results[2])
     assert np.allclose(reembedded_results[0], reembedded_results[1]) and np.allclose(
         reembedded_results[0], reembedded_results[2]
